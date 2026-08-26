@@ -35,7 +35,7 @@ export async function updatenote(id,data) {
     await delay(500);
     const note = notes.find((i) => i.id === Number(id));
     if(!note) throw Error("Id not found ?");
-    Object.assign(notes,note,{updated_at: new Date().toISOString()});
+    Object.assign(note,data,{updated_at: new Date().toISOString()});
     return note;    
 }
 
