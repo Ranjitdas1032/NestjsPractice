@@ -1,46 +1,45 @@
-let notes = [
-  { id: 1, title: "First note", body: "Hello NoteNest", created_at: "2026-08-24T10:00:00Z", updated_at: "2026-08-24T10:00:00Z" },
-  { id: 2, title: "Nginx revision", body: "proxy_pass forwards requests to the app behind it", created_at: "2026-08-24T11:00:00Z", updated_at: "2026-08-24T11:00:00Z" },
-  { id: 3, title: "Next.js rule", body: "Server components by default, use client only when needed", created_at: "2026-08-24T12:00:00Z", updated_at: "2026-08-24T12:00:00Z" },
-];
+import { cache } from "react";
 
-const delay = (ms) => new Promise((r) => setTimeout(r,ms));
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/";
+
+const  handle =(res) =>{
+    if(!res.ok){
+        if(res.status == 404) throw new Error("Note not found");
+        throw new Error(`Api error : ${res.status}`);
+    }
+    return res.status === 204 ? true : res.json(); 
+}
 
 export async function getnotes(){
-    await delay(500);
-    return [...notes]
+    const data = await fetch(`${API_URL}/api/notes/`,{cache :"no-store"});
+    return handle(data);
 }
 
 export async function getid(id){
-    await delay(500);
-    const note = notes.find((i) => i.id === Number(id));
-    if(!note) throw new Error("Note not found");
-    return note;
+     const data = await fetch(`${API_URL}/api/notes/${id}/`, {cache :"no-store"});
+     return handle(data);
 }
 
 export async function createnote({title,body}) {
-    await delay(500);
-    const note = {
-        id : Math.max(0,...notes.map((i) => i.id)) + 1,
-        title,
-        body,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-    }
-    notes.push(note);
-    return note;
+    const data = await fetch(`${API_URL}/api/notes/`, {
+        method : "POST",
+        headers : {"Content-Type" : "application/json"},
+        body : JSON.stringify({title,body}),
+    })
+    return handle(data);
 }
 
 export async function updatenote(id,data) {
-    await delay(500);
-    const note = notes.find((i) => i.id === Number(id));
-    if(!note) throw Error("Id not found ?");
-    Object.assign(note,data,{updated_at: new Date().toISOString()});
-    return note;    
+     const res = await fetch(`${API_URL}/api/notes/${id}/`, {
+        method : "PATCH",
+        headers : {"Content-Type" : "application/json"},
+        body : JSON.stringify(data),
+    })
+    return handle(res);    
 }
 
 export async function deletenote(id) {
-    await delay(500);
-    notes = notes.filter((i) => i.id !== Number(id));
-    return true;
+    const res = await fetch(`${API_URL}/api/notes/${id}/`, {
+        method : "DELETE"})
+    return handle(res); 
 }
