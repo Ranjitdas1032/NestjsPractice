@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getnotes } from "@/lib/api";
+import DeleteButton from "./component/delete-btn";
 
 export default async function Home() {
   const notes = await getnotes();
@@ -17,6 +18,7 @@ export default async function Home() {
                   <p className="mt-2 line-clamp-2 text-sm text-gray-600">{note.body}</p>
                   <p>{new Date(note.updated_at).toLocaleString()}</p>
                   </Link>
+                  <DeleteButton id={note.id} />
               </li>
             ))}
         </ul>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getid } from "@/lib/api";
+import DeleteButton from "@/app/component/delete-btn";
 
 export default async function NotePage({params}){
     const {id} = await params;
@@ -22,6 +23,7 @@ export default async function NotePage({params}){
                 <Link href={`/notes/${note.id}/edit`}  className="rounded border px-3 py-1 text-sm hover: bg-gray-400">
                     Edit
                 </Link>
+                <DeleteButton id={note.id}/>
             </div>
             <p className="whitespace-pre-wrap text-gray-700">{note.body}</p>
             <p className="mt-3 text-xs text-gray-400">
