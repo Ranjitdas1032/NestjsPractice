@@ -2,19 +2,24 @@ from django.db import models
 from django.utils.text import slugify
 
 # Create your models here.
-class Blog(models.Model):
+class Blogs(models.Model):
     title = models.CharField(max_length=100)
-    desc = models.TextField()
+    excerpt = models.CharField(max_length=300)  
+    body = models.TextField(null=True,blank=True)
     slug = models.SlugField(max_length=100,unique=True,blank=True)
-    pick = models.ImageField(upload_to='blog_pics',null=True,blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    published_at = models.DateTimeField(auto_now_add=True)
 
     def save(self,*args,**kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            base = slugify(self.title)
+            slug = base
+            n = 1
 
+            while Blogs.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                n += 1
+                slug = f"{base}-{n}"
+            self.slug = slug
         super().save(*args,**kwargs)
-
 
 
     def __str__(self):
