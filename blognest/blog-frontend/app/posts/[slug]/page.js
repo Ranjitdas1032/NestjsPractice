@@ -6,11 +6,11 @@ export async function generateStaticParams(){
     return posts.map((post) => ({slug : post.slug}));
 }
 
-export default async function getPost(params) {
+export default async function PostPage({params}) {
     const {slug} = await params;
     let post;
     try{
-        post = await getPost(slug); 
+        post = await getpost(slug); 
     }catch(err){
         if(err.message === "Post not found") notFound();
         throw err;
