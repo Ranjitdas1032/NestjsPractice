@@ -9,22 +9,22 @@ export default async  function Home({searchParams}) {
 
   return (
     <div>
-        <h2>Propview - {data.count}</h2>
+        <h2 className="mb-4 text-2xl font-bold">Propview - {data.count}</h2>
         <FilterForm current={params}/>
-        <ul>
+        <ul className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
           {data.results.map((l) => (
-            <li key={l.id}>
-              <h3>{l.title}</h3>
-              <p>{l.city} - {l.city} - {l.price.toLocaleString("en-IN")}</p>
+            <li key={l.id} className="rounded border bg-white p-4">
+              <h3 className="font-semibold">{l.title}</h3>
+              <p className="text-sm text-gray-600">{l.city} - {l.city} - {l.price.toLocaleString("en-IN")}</p>
             </li>
           ))}
         </ul>
-        <div>
+        <div className="mt-4 flex gap-2">
           {data.previous && (
-            <Link href={`/?${new URLSearchParams({...params,page: (Number(params.page || 1)) -1 })}`}>prev</Link>
+            <Link href={`/?${new URLSearchParams({...params,page: (Number(params.page || 1)) -1 })}`} className="rounded border px-3 py-1 text-sm">prev</Link>
           )}
           {data.next && (
-            <Link href={`/?${new URLSearchParams({...params,page: (Number(params.page || 1)) +1 })}`}>next</Link>
+            <Link href={`/?${new URLSearchParams({...params,page: (Number(params.page || 1)) +1 })}`} className="rounded border px-3 py-1 text-sm">next</Link>
           )}
         </div>
     </div>

@@ -6,6 +6,7 @@ export async function getListing(searchParams) {
     if(searchParams.city) qs.set("city",searchParams.city);
     if(searchParams.price) qs.set("price",searchParams.price);
     if(searchParams.bedrooms) qs.set("bedrooms",searchParams.bedrooms);
+    if(searchParams.page) qs.set("page",searchParams.page);
 
     const res = await fetch(`${API_URL}/api/listings/?${qs.toString()}`)
 
