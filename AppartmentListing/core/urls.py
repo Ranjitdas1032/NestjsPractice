@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path,include
 from listing.views import ListingView
 from rest_framework.routers import DefaultRouter
+from listing import views
 
 router = DefaultRouter()
 router.register(r"api/listings", ListingView, basename="listing")
@@ -25,4 +26,5 @@ router.register(r"api/listings", ListingView, basename="listing")
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include(router.urls)),
+    path("api/parse-search/",views.parsh_search , name='parsh_search',)
 ]

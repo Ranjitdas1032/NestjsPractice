@@ -25,3 +25,30 @@ class ListingView(viewsets.ModelViewSet):
             qs = qs.filter(bedrooms=bedrooms)
 
         return qs
+
+import re
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+CITIES = ["noida", "delhi", "gurgaon", "gurugram", "pune"]
+
+@api_view(['POST'])
+def parsh_search(request):
+    query = (request.data.get('query') or "").lower()
+    result = {}
+
+    for c in CITIES:
+        if c in query:
+            result["city"] = c
+
+    q = re.search(r"(\d+)\s*bhk",query)
+
+    if q:
+        result["bedrooms"] = int(q.group(1))
+
+    q = re.search(r"under\s*(\d+)s*k",query)
+
+    if q:
+        result["price"] = int(q.group(1)) * 1000
+
+    return Response(result)
