@@ -19,9 +19,10 @@ from django.urls import path,include
 from listing.views import ListingView
 from rest_framework.routers import DefaultRouter
 from listing import views
-
+from digest.views import DigestView
 router = DefaultRouter()
 router.register(r"api/listings", ListingView, basename="listing")
+router.register(r"api/digest/latest", DigestView, basename="digest")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
